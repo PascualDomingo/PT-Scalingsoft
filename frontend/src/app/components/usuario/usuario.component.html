@@ -1,32 +1,54 @@
-<div class="center-container d-flex align-items-start justify-content-center p-5">
+<div *ngIf="flagAlert" class="container">
+    <div class="alert alert-primary alert-dismissible fade show alert-floating" role="alert">
+        <div [innerHTML]="msgAlert"></div>
+        <button (click)="cerrarAlertMessage()" type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button>
+    </div>
+</div>
+
+<div class="center-container d-flex align-items-start justify-content-center p-4">
 
     <form class="col-3 bg-light p-4 m-4">
 
         <div class="form-outline mb-3">
-            <input type="text" id="form2Example1" class="form-control" />
+            <input [(ngModel)]="DataUser.firstName" [ngModelOptions]="{standalone: true}" type="text" id="form2Example1"
+                class="form-control" />
             <label class="form-label" for="form2Example1">Primer nombre</label>
         </div>
 
         <div class="form-outline mb-3">
-            <input type="text" id="form2Example1" class="form-control" />
+            <input [(ngModel)]="DataUser.lastName" [ngModelOptions]="{standalone: true}" type="text" id="form2Example2"
+                class="form-control" />
             <label class="form-label" for="form2Example1">Segundo nombre</label>
         </div>
 
+        <div class="dropdown mb-3">
+            <label class="form-label" for="form2Example1">Tipo de rol</label>
+            <select [(ngModel)]="DataUser.roleId" name="roleId" [ngModelOptions]="{ standalone: true }"
+                class="form-select" id="form2Example3">
+                <option value="0" disabled selected>Selecciona un rol</option>
+                <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.rol }}</option>
+            </select>
+        </div>
+
         <div class="form-outline mb-3">
-            <input type="text" id="form2Example1" class="form-control" />
+            <input [(ngModel)]="DataUser.user_name" [ngModelOptions]="{standalone: true}" type="text" id="form2Example4"
+                class="form-control" [disabled]="flagInputUsername" />
             <label class="form-label" for="form2Example1">Nombre de usuario</label>
         </div>
 
         <!-- Password input -->
         <div class="form-outline mb-3">
-            <input type="password" id="form2Example2" class="form-control" />
+            <input [(ngModel)]="DataUser.password" [ngModelOptions]="{standalone: true}" type="password"
+                id="form2Example5" class="form-control" />
             <label class="form-label" for="form2Example2">Contraseña</label>
         </div>
 
         <!-- 2 column grid layout for inline styling -->
         <div class="row mb-3">
             <!-- Submit button -->
-            <button type="button" class="btn btn-success btn-block mb-2">Guardar usuario</button>
+            <button (click)="botonGuardarDatoUser()" type="button" class="btn btn-success btn-block mb-2">Guardar
+                usuario</button>
         </div>
 
     </form>
@@ -43,29 +65,31 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td><button type="button" class="btn btn-primary"><i class="bi bi-unlock m-2"></i>Estado<i class="bi bi-lock"></i> </button></td>
-                <td><button type="button" class="btn btn-info"><i class="bi bi-person-check-fill m-2"></i>Modificar</button></td>
-                <td><button type="button" class="btn btn-danger"><i class="bi bi-trash m-2"></i>Eliminar </button></td>
+
+            <tr *ngFor="let usuario of usuarios">
+                <th scope="row">{{ usuario.userId }}</th>
+                <td>{{ usuario.firstName }}</td>
+                <td>{{ usuario.user_name }}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" (click)="botonCambiarEstado(usuario.userId)" [disabled]="!flag_admin">
+                        <!-- Si el estado es A significa que está activado, el admin puede desactivar-->
+                        <!-- Si el estado es D significa que está desactivado, el admin puede activar-->
+                        <i [class]="usuario.status === '0' ?  'bi bi-lock m-2' : 'bi bi-unlock m-2'"></i>
+                        {{ usuario.status === '1' ? 'Desactivar' : 'Activar' }}
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info" (click)="botonModificarUsuario(usuario.userId)">
+                        <i class="bi bi-person-check-fill m-2"></i>Modificar
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" (click)="botonEliminarUsuario(usuario.userId)">
+                        <i class="bi bi-trash m-2"></i>Eliminar
+                    </button>
+                </td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td><button type="button" class="btn btn-primary"><i class="bi bi-unlock m-2"></i>Estado </button></td>
-                <td><button type="button" class="btn btn-info"><i class="bi bi-person-check-fill m-2"></i>Modificar</button></td>
-                <td><button type="button" class="btn btn-danger"><i class="bi bi-trash m-2"></i>Eliminar</button></td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td><button type="button" class="btn btn-primary"><i class="bi bi-unlock m-2"></i>Estado </button></td>
-                <td><button type="button" class="btn btn-info"><i class="bi bi-person-check-fill m-2"></i>Modificar</button></td>
-                <td><button type="button" class="btn btn-danger"><i class="bi bi-trash m-2"></i>Eliminar</button></td>
-            </tr>
+
         </tbody>
     </table>
 

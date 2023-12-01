@@ -1,0 +1,8 @@
+
+.alert-floating {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000; /* Asegúrate de que el z-index sea mayor que el de otros elementos */
+  }

@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app/app-routing.module';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MainComponent } from './app/components/main/main.component';
+import { HttpClientModule } from '@angular/common/http';
 
 //import { AppModule } from './app/app.module';
 
@@ -18,7 +19,8 @@ if (environment.production) {
 bootstrapApplication(MainComponent, {
   providers: [
     provideAnimations(),
-    provideRouter(routes)
+    provideRouter(routes),
+    importProvidersFrom(HttpClientModule),
   ]
 })
   .catch((err) => console.error(err));
